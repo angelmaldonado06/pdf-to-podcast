@@ -1,3 +1,24 @@
-Running on local URL:  http://0.0.0.0:7860
+* Running on local URL:  http://0.0.0.0:7860
+* To create a public link, set `share=True` in `launch()`.
 
-To create a public link, set `share=True` in `launch()`.
+[23:57:01] Submitting PDFs for processing...
+Using voices: {'speaker-1': 'iP95p4xoKVk53GoZ742B', 'speaker-2': '9BWtsMINqrJLrRacOk9x'}
+[23:57:01] Job ID received: 74507b58-e0b7-45bf-8646-3b884ec80d12
+[23:57:01] Connected to status WebSocket
+[23:57:01] Sent ready acknowledgment
+[23:57:01] pdf: pending - Job created
+[23:57:01] pdf: processing - Processing 2 PDFs
+[23:57:51] pdf: completed - All PDFs processed successfully
+[23:57:52] agent: pending - Job created
+[23:57:52] agent: processing - Initializing processing
+[23:57:52] agent: processing - Summarizing 2 PDFs
+[23:58:05] agent: processing - Generating initial outline
+[23:58:21] agent: processing - Converting raw outline to structured format
+[23:58:29] agent: failed - 1 validation error for PodcastOutline
+segments
+  Field required [type=missing, input_value={'$defs': {'PodcastSegmen...line', 'type': 'object'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+[23:58:29] Job failed in agent: 1 validation error for PodcastOutline
+segments
+  Field required [type=missing, input_value={'$defs': {'PodcastSegmen...line', 'type': 'object'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing

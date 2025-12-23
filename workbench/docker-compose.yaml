@@ -8,7 +8,7 @@ services:
           devices:
             - driver: nvidia
               count: 1
-              capabilities: [ gpu ]
+              capabilities: ["gpu"]
     ports:
       - "8000:8000"
     volumes:
@@ -20,9 +20,9 @@ services:
       - NGC_API_KEY=${NVIDIA_API_KEY:?Error NVIDIA_API_KEY not set}
     networks:
       - app-network
-    profiles:
-      - local
-      
+    # Keep the container alive for GPU testing
+    command: tail -f /dev/null
+
   redis:
     image: redis:latest
     ports:
@@ -45,7 +45,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live || exit 1"]
       interval: 30s
       timeout: 20s
       retries: 5
@@ -122,18 +122,18 @@ services:
     image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686" # UI
-      - "4317:4317" # OTLP GRPC
-      - "4318:4318" # OTLP HTTP
+      - "4317:4317"   # OTLP GRPC
+      - "4318:4318"   # OTLP HTTP
     environment:
       - COLLECTOR_OTLP_ENABLED=true
     healthcheck:
-      test: ["CMD", "wget", "--spider", "localhost:16686"]
+      test: ["CMD-SHELL", "wget --spider localhost:16686 || exit 1"]
       interval: 5s
       timeout: 3s
       retries: 3
     networks:
       - app-network
-  
+
   pdf-api:
     build:
       context: ../services/PDFService/PDFModelService
@@ -170,6 +170,8 @@ services:
     restart: unless-stopped
     networks:
       - app-network
+    # FIX: pin numpy and opencv for Python 3.11
+    command: bash -c "pip install --upgrade --force-reinstall numpy==1.25.2 opencv-python==4.9.0.80 && celery -A tasks worker --loglevel=info"
 
 volumes:
   redis_data:
